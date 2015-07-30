@@ -6,13 +6,18 @@ Universal Time using local system timezone
 
 This module lets you have whatever it is that your local system believes is Universal Time relative to the local time zone, present, past and future. And it lets you use the things that come with Base.Dates (for the most part .. not exaustively).  If you find errors, omissions, better ways, raise an issue.
 
-Caveats:
+####Asks:
 
-1. This may be of transitional use -- please do not expect this to match the eventual handling of Universal Time.
-2. *Do Not* store these as typed values in a jld file -- store the string forms; the strings will be redigestable later, that jld not.
-3. Some sysadmins set up the network to live on Universal Time, and adjust that to give local time.  If you are working in that enivronment (a) thank your sysadmin for caring (b) that may mislead the C library.
-4. This uses a lesser visted few lines of ISO and ANSI Standard C.  If your supplier let something slide in their implementation of mktime_r, that would be unhelpful.
-5. Try UTime.ok() (not exported), if it is false is module should not be used.
+1. **Do Not** store UT typed values in a jld file
+    -- store their strings, they will be rereadable.
+
+2. This is transitional -- working in multiple timezones is different.
+3. The module requires the local system provides a Standard C compliant maketm_r().
+4. Try UTime.ok() (not exported), if it is false is module should not be used.
+5. This is transitional -- working in multiple timezones is different.
+
+
+####Offers:
 
 |function|action|
 ---------|-------
