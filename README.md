@@ -12,7 +12,7 @@ Caveats:
 2. *Do Not* store these as typed values in a jld file -- store the string forms; the strings will be redigestable later, that jld not.
 3. Some sysadmins set up the network to live on Universal Time, and adjust that to give local time.  If you are working in that enivronment (a) thank your sysadmin for caring (b) that may mislead the C library.
 4. This uses a lesser visted few lines of ISO and ANSI Standard C.  If your supplier let something slide in their implementation of mktime_r, that would be unhelpful.
-5. Try it on two dates, one in standard time and one in savings time. Check the result.
+5. Try UTime.ok() (not exported), if it is false is module should not be used.
 
 |function|action|
 ---------|-------
