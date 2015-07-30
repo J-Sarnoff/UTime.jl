@@ -23,6 +23,9 @@ Caveats:
 |UT(...)|like DateTime(...)|
 |year(utm::UT)..|like year,month...|
 |Year(utm::UT)..|like Year,Month...|
+|format(utm,string) | postpends " UT" |
+|format(utm,string,false) | does not postpend |
+|format(utm,DateFormat)   | does not postpend |
 |much other stuff|used as with DateTime|
 
 ```julia
