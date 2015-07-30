@@ -4,7 +4,9 @@ Universal Time using local system timezone
 
 #####*Experimental, Changeable, *Robustly Untested**
 
-This module lets you have whatever it is that your local system believes is Universal Time relative to the local time zone, present, past and future. And it lets you use the things that come with Base.Dates (for the most part .. not exaustively).  If you find errors, omissions, better ways, raise an issue.
+This module lets you have whatever it is that your local system believes is Universal Time relative to the local time zone, present, past and future. And it lets you use the things that come with Base.Dates (for the most part .. not exaustively).
+
+If you find errors, omissions, better ways, please raise an issue here.
 
 ####Asks:
 
