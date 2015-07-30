@@ -235,6 +235,7 @@ function ut_raw(dt::DateTime)
     Base.Dates.unix2datetime( sec )
 end
 
+
 # dt as localtime --> ut (with leap seconds)
 function utc(dt::DateTime)
     warn("try ut($(dt))")
@@ -258,6 +259,12 @@ show(io::IO, dt::UT) =
 
 convert(::DateTime, dtm::UT) = localtime(dtm.value)
 #DateTime(dtm::UT) = localtime(dtm.value)
+function localtime(dtm::UT)
+    sec = Base.Dates.datetime2unix(dtm.value)
+    sec = lcl_from_uttime(sec)    
+    Base.Dates.unix2datetime( sec )
+end
+
 @vectorize_1arg DateTime UT
 @vectorize_1arg UT DateTime
 
@@ -308,13 +315,13 @@ end
 (-)(udtm::UT, udtm2::UT) = (-)(udtm.value, udtm2.value)
 (-)(udtm::UT, p::Period) = UT((-)(udtm.value, p))
 (.-)(udtm::UT, vec::Array{UT,1}) = 
-    [(-)(udtm, i) for i in vec])
+    [(-)(udtm, i) for i in vec]
 (.-)(udtm::UT, vec::Array{Period,1}) = 
     [(-)(udtm, i) for i in vec]
 (.-)(vec::Array{UT,1}, udtm::UT) = 
-    [(-)(i,udtm) for i in vec])
+    [(-)(i,udtm) for i in vec]
 (.-)(vec::Array{UT,1}, p::Period) = 
-    [(-)(i,p) for i in vec])
+    [(-)(i,p) for i in vec]
 
 (+)(udtm::UT, p::Period) = UT((+)(udtm.value, p))
 (+)(p::Period, udtm::UT) = (+)(udtm, p)
@@ -322,5 +329,31 @@ end
     [(+)(udtm, i) for i in vec]
 (.+)(vec::Array{UT,1},p::Period) = 
     [(+)(i, p) for i in vec]
+
+# attempt to determine if this works with the local host
+# Good reader, this is code to be avoided in almost any
+# other circumstance; it three distinct ways, it intends
+# to subvert the logic that makes this module sound.
+#
+function ok()
+    ofs(dtm::UT) = 
+       UTime.lcl_offset(trunc(Int64,Dates.datetime2unix(dtm.value)))
+    dofs(dtm1::UT,dtm2::UT)=
+       fld(ofs(dtm1)-ofs(dtm2), 60)
+
+    Jan1 = UT(DateTime(2000,1,1,0,0,0))
+    Mar3 = UT(DateTime(2000,3,3,0,0,0))
+    Jul1 = UT(DateTime(2000,7,1,0,0,0))
+    Sep1 = UT(DateTime(2000,9,3,0,0,0))
+    JanMar = dofs(Mar3,Jan1)
+    JanJul = dofs(Jul1,Jan1)
+    JanSep = dofs(Sep1,Jan1)
+    MarJul = dofs(Jul1,Mar3)        
+    MarSep = dofs(Sep1,Mar3)
+    JulSep = dofs(Sep1,Jul1)
+    sumtest  = (JanMar+JanJul+JanSep+MarJul+MarSep+JulSep != 0)
+    prodtest = (JanMar*JanJul*JanSep*MarJul*MarSep*JulSep == 0)
+    sumtest & prodtest
+end
 
 end # module
