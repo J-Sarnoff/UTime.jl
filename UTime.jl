@@ -16,7 +16,7 @@ import Base.Dates: Date, DateTime, DateFormat,
            adjust, tonext, toprev, tofirst, tolast, recur,
            format, (+), (-), (.+), (.-)
  
-export ut, localtime, UT,
+export ut, localtime, UT, utc,
            Year, Month, Week, Day, Hour, Minute, Second, Millisecond,
            yearmonthday, yearmonth, monthday, year, month,
            week, day, hour, minute, second, millisecond, 
@@ -238,8 +238,9 @@ end
 
 # dt as localtime --> ut (with leap seconds)
 function utc(dt::DateTime)
-    warn("try ut($(dt))")
+    info("try ut($(dt)), utc requires leap seconds")
 end
+utc() = info("try ut(), utc requires leap seconds")
 
 # dt as ut --> localtime (without leap seconds
 function localtime(dt::DateTime)
