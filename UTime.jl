@@ -306,12 +306,14 @@ end
 const ISOUniversalTimeFormat = DateFormat("yyyy-mm-ddZHH:MM:SS.s")
 
 function format(udtm::UT, pattern::AbstractString, addUTC=true::Bool)
-   s = format(UT.value, pattern)
+   s = format(udtm.value, pattern)
    if addUTC
     s = s * " UT"
    end
    s 
 end
+
+format(udtm::UT, fmt::Base.Dates.DateFormat) = format(udtm.value, fmt)
 
 (-)(udtm::UT, udtm2::UT) = (-)(udtm.value, udtm2.value)
 (-)(udtm::UT, p::Period) = UT((-)(udtm.value, p))
