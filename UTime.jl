@@ -1,6 +1,7 @@
 module UTime
 
-import Base:show
+import Base:show, string
+
 import Base.Dates: Date, DateTime, DateFormat,
            Period, DatePeriod, TimePeriod, Year, Month,
            Week, Day, Hour, Minute, Second, Millisecond,
@@ -255,8 +256,14 @@ immutable UT
     UT(dt::DateTime) = new(dt)
     UT() = new(ut_raw())
 end
-show(io::IO, dt::UT) =
-    show(io, replace(string(dt.value),"T","Z"))
+
+
+
+function show(io::IO, dt::UT)
+    a = string(dt.value)
+    a = replace(a, "T", "Z")
+    print(io, a)
+end
 
 convert(::DateTime, dtm::UT) = localtime(dtm.value)
 #DateTime(dtm::UT) = localtime(dtm.value)
