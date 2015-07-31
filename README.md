@@ -35,6 +35,7 @@ If you find errors, omissions, better ways, please raise an issue here.
 |format(utm,DateFormat)   | does not postpend |
 |much other stuff|used as with DateTime|
 
+```importall UTime```
 ```julia
 exports
 ut, localtime, UT,
