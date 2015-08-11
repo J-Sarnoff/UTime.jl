@@ -404,8 +404,36 @@ for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
 end
 
 for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
-    @eval ($fn)(dtm::UT, args...) = UT(($fn)(dtm.value, args...))
+    @eval begin
+      ($fn)(dtm::UT, args...)  = UT(($fn)(dtm.value, args...))
+      ($fn)(dtm::LCL, args...) = LCL(($fn)(dtm.value, args...))
+      #@eval ($fn)(dtm::UTC, args...) = UTC(($fn)(dtm.value, args...))
+    end
 end
+
+for U in [:LCL, :UT]
+  @eval begin
+    (-)(udt::($U), udt2::($U)) = (-)(udt.value, udt2.value)
+    (-)(udt::($U), p::Period) = ($U)((-)(udt.value, p))
+    (.-)(udt::($U), vec::Array{($U),1}) =
+      [(-)(udt, i) for i in vec]
+    (.-)(udt::($U), vec::Array{Period,1}) =
+      [(-)(udt, i) for i in vec]
+    (.-)(vec::Array{($U),1}, udt::($U)) =
+      [(-)(i,udt) for i in vec]
+    (.-)(vec::Array{($U),1}, p::Period) =
+      [(-)(i,p) for i in vec]
+
+   (+)(udt::($U), p::Period) = ($U)((+)(udt.value, p))
+   (+)(p::Period, udt::($U)) = (+)(udt, p)
+   (.+)(udt::($U), vec::Array{Period,1}) =
+     [(+)(udt, i) for i in vec]
+   (.+)(vec::Array{($U),1},p::Period) =
+     [(+)(i, p) for i in vec]
+  end
+end
+
+
 
 const ISOUniversalTimeFormat = DateFormat("yyyy-mm-ddTHH:MM:SS.sZ");
 const ISOUnivCoordTimeFormat = DateFormat("yyyy-mm-dd HH:MM:SS.sZ");
@@ -441,24 +469,6 @@ function show(io::IO, dt::LCL)
     print(io, str)
 end
 
-
-(-)(udt::UT, udt2::UT) = (-)(udt.value, udt2.value)
-(-)(udt::UT, p::Period) = UT((-)(udt.value, p))
-(.-)(udt::UT, vec::Array{UT,1}) =
-    [(-)(udt, i) for i in vec]
-(.-)(udt::UT, vec::Array{Period,1}) =
-    [(-)(udt, i) for i in vec]
-(.-)(vec::Array{UT,1}, udt::UT) =
-    [(-)(i,udt) for i in vec]
-(.-)(vec::Array{UT,1}, p::Period) =
-    [(-)(i,p) for i in vec]
-
-(+)(udt::UT, p::Period) = UT((+)(udt.value, p))
-(+)(p::Period, udt::UT) = (+)(udt, p)
-(.+)(udt::UT, vec::Array{Period,1}) =
-    [(+)(udt, i) for i in vec]
-(.+)(vec::Array{UT,1},p::Period) =
-    [(+)(i, p) for i in vec]
 
 # attempt to determine if this works with the local host
 # Good reader, this is code to be avoided in almost any
