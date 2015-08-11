@@ -11,7 +11,7 @@ immutable UT <: WrappedDateTime
         fsecs += ofs
         new(Base.Dates.unix2datetime(fsecs))
     end
-    UT() = new(ut_raw())
+    UT() = new(utm_unwrapped())
 end
 
 
