@@ -203,13 +203,13 @@ end
 
 
 
-ut_raw() =
+utm_unwrapped() =
     Base.Dates.unix2datetime(
         utm_from_lcltime(
             floor(Int64,Base.Dates.datetime2unix(Base.Dates.now())) ))
 
 # dt as localtime --> ut (without leap seconds)
-function ut_raw(dt::DateTime)
+function utm_unwrapped(dt::DateTime)
     sec = floor(Int64, Base.Dates.datetime2unix(dt))
     sec = utm_from_lcltime(sec)
     Base.Dates.unix2datetime( sec )
