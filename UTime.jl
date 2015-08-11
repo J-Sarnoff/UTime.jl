@@ -403,14 +403,6 @@ for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
     end
 end
 
-for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
-    @eval begin
-      ($fn)(dtm::UT, args...)  = UT(($fn)(dtm.value, args...))
-      ($fn)(dtm::LCL, args...) = LCL(($fn)(dtm.value, args...))
-      #@eval ($fn)(dtm::UTC, args...) = UTC(($fn)(dtm.value, args...))
-    end
-end
-
 for U in [:LCL, :UT]
   @eval begin
     (-)(udt::($U), udt2::($U)) = (-)(udt.value, udt2.value)
