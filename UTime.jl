@@ -3,8 +3,13 @@ module UTime
 import Base: show, string
 
 import Base.Dates: Date, DateTime, DateFormat,
-           Period, DatePeriod, TimePeriod, Year, Month,
-           Week, Day, Hour, Minute, Second, Millisecond,
+           Period, DatePeriod, TimePeriod,
+           Year, Month, Week, Day, Hour, Minute, Second, Millisecond,
+           Mon, Tue, Wed, Thu, Fri, Sat, Sun,
+           Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,
+           Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec,
+           January, February, March, April, May, June, July, August,
+           September, October, November, December,
            yearmonthday, yearmonth, monthday, year, month,
            week, day, hour, minute, second, millisecond,
            dayofmonth, dayofweek, isleapyear, daysinmonth,
@@ -19,6 +24,11 @@ import Base.Dates: Date, DateTime, DateFormat,
 
 export ut, localtime, UT, LCL, utc,
            Year, Month, Week, Day, Hour, Minute, Second, Millisecond,
+           Mon, Tue, Wed, Thu, Fri, Sat, Sun,
+           Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,
+           Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec,
+           January, February, March, April, May, June, July, August,
+           September, October, November, December,
            yearmonthday, yearmonth, monthday, year, month,
            week, day, hour, minute, second, millisecond,
            dayofmonth, dayofweek, isleapyear, daysinmonth,
@@ -332,44 +342,65 @@ localtime() = LCL(Base.Dates.now())
 #@vectorize_1arg UTC UT
 #@vectorize_1arg UT UTC
 
-UT{T<:Integer}(yr::T) = UT(DateTime(yr))
-UT{T<:Integer}(yr::T,mo::T ) = UT(DateTime(yr,mo))
-UT{T<:Integer}(yr::T,mo::T,dy::T) = UT(DateTime(yr,mo,dy))
-UT{T<:Integer}(yr::T,mo::T,dy::T,hr::T) =
-  UT(DateTime(yr,mo,dy,hr))
-UT{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T) =
-  UT(DateTime(yr,mo,dy,hr,mi))
-UT{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T) =
-  UT(DateTime(yr,mo,dy,hr,mi,sc))
-UT{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T,ss::T) =
-  UT(DateTime(yr,mo,dy,hr,mi,sc,ss))
-
-
-LCL{T<:Integer}(yr::T) = LCL(DateTime(yr))
-LCL{T<:Integer}(yr::T,mo::T ) = LCL(DateTime(yr,mo))
-LCL{T<:Integer}(yr::T,mo::T,dy::T) = LCL(DateTime(yr,mo,dy))
-LCL{T<:Integer}(yr::T,mo::T,dy::T,hr::T) =
-  LCL(DateTime(yr,mo,dy,hr))
-LCL{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T) =
-  LCL(DateTime(yr,mo,dy,hr,mi))
-LCL{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T) =
-  LCL(DateTime(yr,mo,dy,hr,mi,sc))
-LCL{T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T,ss::T) =
-  LCL(DateTime(yr,mo,dy,hr,mi,sc,ss))
+for U in [:LCL, :UT]
+  @eval begin
+    $(U){T<:Integer}(yr::T) = $(U)(DateTime(yr))
+    $(U){T<:Integer}(yr::T,mo::T ) = $(U)(DateTime(yr,mo))
+    $(U){T<:Integer}(yr::T,mo::T,dy::T) = $(U)(DateTime(yr,mo,dy))
+    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T) =
+      $(U)(DateTime(yr,mo,dy,hr))
+    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T) =
+      $(U)(DateTime(yr,mo,dy,hr,mi))
+    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T) =
+      $(U)(DateTime(yr,mo,dy,hr,mi,sc))
+    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T,ss::T) =
+      $(U)(DateTime(yr,mo,dy,hr,mi,sc,ss))
+  end
+end
 
 
 # :Period, :DatePeriod, :TimePeriod
 
-for fn in [:Year, :Month, :Week, :Day, :Hour, :Minute, :Second,
-           :Millisecond,
-           :yearmonthday, :yearmonth, :monthday, :year, :month,
+for fn in [:Year, :Month, :Week, :Day, :Hour, :Minute, :Second, :Millisecond]
+    @eval begin
+        convert(::Type{($fn)}, (dt::LCL)) = convert(($fn),(dt.value))
+        convert(::Type{($fn)}, (dt::UT))  = convert(($fn),(dt.value))
+        #convert(::($fn), (dt::UTC)) = convert(::($fn),(dt.value))
+    end
+end
+
+for fn in [:yearmonthday, :yearmonth, :monthday, :year, :month,
            :week, :day, :hour, :minute, :second, :millisecond,
            :dayofmonth, :dayofweek, :isleapyear, :daysinmonth,
            :daysinyear, :dayofyear, :dayname, :dayabbr,
            :dayofweekofmonth, :daysofweekinmonth, :monthname,
            :monthabbr, :quarterofyear, :dayofquarter
           ]
-    @eval ($fn)(dtm::UT) = ($fn)(dtm.value)
+    @eval begin
+        ($fn)(dt::LCL) = ($fn)(dt.value)
+        ($fn)(dt::UT)  = ($fn)(dt.value)
+        #($fn)(dt::UTC) = ($fn)(dt.value)
+    end
+end
+
+for fn in [:firstdayofweek, :lastdayofweek,
+           :firstdayofmonth, :lastdayofmonth, :firstdayofyear,
+           :lastdayofyear, :firstdayofquarter, :lastdayofquarter
+          ]
+    @eval begin
+        ($fn)(dt::LCL) = LCL(($fn)(dt.value))
+        ($fn)(dt::UT)  = UT(($fn)(dt.value))
+        #($fn)(dt::UTC) = ($fn)(dt.value)
+    end
+end
+
+
+for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
+    @eval begin
+      ($fn)(dt::LCL, args...) = UT(($fn)(dt.value, args...))
+      ($fn)(dt::UT, args...)  = UT(($fn)(dt.value, args...))
+    # ($fn)(dt::UTC, args...) = UT(($fn)(dt.value, args...))
+    end
 end
 
 for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
