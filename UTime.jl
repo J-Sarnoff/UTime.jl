@@ -1,6 +1,6 @@
 module UTime
 
-import Base: show, string
+import Base: show, string, (==),
 
 import Base.Dates: AbstractTime, Date, DateTime, DateFormat,
            Period, DatePeriod, TimePeriod,

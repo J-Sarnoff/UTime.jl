@@ -1,3 +1,4 @@
+const z32 = zero(Int32)
 
 abstract CTmStruct
 
@@ -18,7 +19,7 @@ type TmCStruct <: CTmStruct
     _13::Int32
     _14::Int32
 
-    TmCStruct() = new(0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    TmCStruct() = new(z32)
 end
 
 function (==)(a::TmCStruct, b::TmCStruct)
