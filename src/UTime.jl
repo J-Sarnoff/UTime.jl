@@ -22,7 +22,7 @@ import Base.Dates: AbstractTime, Date, DateTime, DateFormat,
            adjust, tonext, toprev, tofirst, tolast, recur,
            format, (+), (-), (.+), (.-)
 
-export ut, localtime, UT, LCL, utc,
+export ut, gmt, localtime, UT, LCL, utc,
            Year, Month, Week, Day, Hour, Minute, Second, Millisecond,
            Mon, Tue, Wed, Thu, Fri, Sat, Sun,
            Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,

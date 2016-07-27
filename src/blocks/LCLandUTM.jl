@@ -48,6 +48,11 @@ ut() = UT()
 ut(dtm::UT) = dtm
 ut(dtm::LCL) = UT(dtm.value)
 
+gmt(dtm::DateTime) = UT(dtm)
+gmt() = UT()
+gmt(dtm::UT) = dtm
+gmt(dtm::LCL) = UT(dtm.value)
+
 # dt as localtime --> ut (with leap seconds)
 function utc(dt::DateTime)
     info("try ut($(dt)), utc requires leap seconds")
