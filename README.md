@@ -36,7 +36,7 @@ If you find errors, omissions, better ways, please raise an issue here.
 ```importall UTime```
 ```julia
 exports
-ut, localtime, UT,
+gmt, ut, localtime, UT # gmt is an alias for ut
 
 exports (imported from Base.Dates)
 Year, Month, Week, Day, Hour, Minute, Second, Millisecond,
