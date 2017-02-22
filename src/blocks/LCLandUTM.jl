@@ -1,4 +1,4 @@
-if !isdev(:AbstractTime)
+if !isdefined(:AbstractTime)
     @compat abstract type AbstractTime end
 end    
 @compat abstract type WrappedDateTime<:AbstractTime end
