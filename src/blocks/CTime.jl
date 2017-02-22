@@ -24,14 +24,15 @@ struct TmCStruct <: CTmStruct
 end
 
 function (==)(a::TmCStruct, b::TmCStruct)
-    fields = [:sec,:min, :hour, :mday, :month, :year, :wday, :yday, :isdst]
-    ans = true
+    fields = (:sec,:min, :hour, :mday, :month, :year, :wday, :yday, :isdst)
+    res = true
     for f in fields
        if (a).(f) != (b).(f)
-          print(f); ans = false
+          print(f)
+          res = false
        end
     end
-    ans
+    res
 end
 
 (==)(a::CTmStruct, b::CTmStruct) = (==)(a.tm, b.tm)
