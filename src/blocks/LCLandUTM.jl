@@ -1,5 +1,5 @@
 
-abstract WrappedDateTime <: AbstractTime
+@compat abstract type WrappedDateTime<:AbstractTime end
 
 immutable UT <: WrappedDateTime
     value::DateTime
