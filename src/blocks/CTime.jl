@@ -3,7 +3,7 @@
 
 const z32 = zero(Int32)
 
-type TmCStruct <: CTmStruct
+struct TmCStruct <: CTmStruct
     sec  ::Int32 # 0..
     min  ::Int32 # 0..
     hour ::Int32 # 0..
