@@ -1,6 +1,3 @@
-if !isdefined(:AbstractTime)
-    @compat abstract type AbstractTime end
-end    
 @compat abstract type WrappedDateTime<:AbstractTime end
 
 struct UT <: WrappedDateTime
@@ -81,14 +78,6 @@ localtime(dtm::LCL) = dtm
 localtime() = LCL(Base.Dates.now())
 
 
-
-@vectorize_1arg DateTime UT
-@vectorize_1arg UT DateTime
-#@vectorize_1arg DateTime UTC
-#@vectorize_1arg UTC DateTime
-#@vectorize_1arg UTC UT
-#@vectorize_1arg UT UTC
-
 for U in [:LCL, :UT]
   @eval begin
     $(U){T<:Integer}(yr::T) = $(U)(DateTime(yr))
@@ -108,7 +97,7 @@ end
 
 # :Period, :DatePeriod, :TimePeriod
 
-for fn in [:Year, :Month, :Week, :Day, :Hour, :Minute, :Second, :Millisecond]
+for fn in (:Year, :Month, :Week, :Day, :Hour, :Minute, :Second, :Millisecond)
     @eval begin
         convert(::Type{($fn)}, (dt::LCL)) = convert(($fn),(dt.value))
         convert(::Type{($fn)}, (dt::UT))  = convert(($fn),(dt.value))
@@ -116,13 +105,13 @@ for fn in [:Year, :Month, :Week, :Day, :Hour, :Minute, :Second, :Millisecond]
     end
 end
 
-for fn in [:yearmonthday, :yearmonth, :monthday, :year, :month,
+for fn in (:yearmonthday, :yearmonth, :monthday, :year, :month,
            :week, :day, :hour, :minute, :second, :millisecond,
            :dayofmonth, :dayofweek, :isleapyear, :daysinmonth,
            :daysinyear, :dayofyear, :dayname, :dayabbr,
            :dayofweekofmonth, :daysofweekinmonth, :monthname,
            :monthabbr, :quarterofyear, :dayofquarter
-          ]
+          )
     @eval begin
         ($fn)(dt::LCL) = ($fn)(dt.value)
         ($fn)(dt::UT)  = ($fn)(dt.value)
@@ -142,7 +131,7 @@ for fn in [:firstdayofweek, :lastdayofweek,
 end
 
 
-for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
+for fn in (:adjust, :tonext, :toprev, :tofirst, :tolast, :recur)
     @eval begin
       ($fn)(dt::LCL, args...) = UT(($fn)(dt.value, args...))
       ($fn)(dt::UT, args...)  = UT(($fn)(dt.value, args...))
@@ -151,7 +140,7 @@ for fn in [:adjust, :tonext, :toprev, :tofirst, :tolast, :recur]
 end
 
 
-for U in [:LCL, :UT]
+for U in (:LCL, :UT)
   @eval begin
     (-)(udt::($U), udt2::($U)) = (-)(udt.value, udt2.value)
     (-)(udt::($U), p::Period) = ($U)((-)(udt.value, p))
