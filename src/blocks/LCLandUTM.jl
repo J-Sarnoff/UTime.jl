@@ -1,4 +1,6 @@
-
+if !isdev(:AbstractTime)
+    @compat abstract type AbstractTime end
+end    
 @compat abstract type WrappedDateTime<:AbstractTime end
 
 immutable UT <: WrappedDateTime
