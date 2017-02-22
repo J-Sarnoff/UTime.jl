@@ -3,7 +3,7 @@ if !isdefined(:AbstractTime)
 end    
 @compat abstract type WrappedDateTime<:AbstractTime end
 
-immutable UT <: WrappedDateTime
+struct UT <: WrappedDateTime
     value::DateTime
 
     function UT(dt::DateTime)
@@ -17,7 +17,7 @@ immutable UT <: WrappedDateTime
 end
 
 
-immutable LCL <: WrappedDateTime
+struct LCL <: WrappedDateTime
     value::DateTime
 
     LCL(dt::DateTime) = new(dt)
