@@ -1,5 +1,5 @@
 
-abstract CTmStruct
+@compat abstract type CTmStruct end
 
 const z32 = zero(Int32)
 
