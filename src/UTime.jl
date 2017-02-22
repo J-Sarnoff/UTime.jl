@@ -1,5 +1,7 @@
 module UTime
 
+using Compat
+
 import Base: show, string, (==), (!=)
 
 import Base.Dates: AbstractTime, Date, DateTime, DateFormat,
