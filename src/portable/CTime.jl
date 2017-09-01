@@ -2,7 +2,7 @@ abstract type CTmStruct end
 
 const z32 = zero(Int32)
 
-struct TmCStruct <: CTmStruct
+mutable struct TmCStruct <: CTmStruct
     sec  ::Int32 # 0..
     min  ::Int32 # 0..
     hour ::Int32 # 0..
@@ -36,7 +36,7 @@ end
 
 (==)(a::CTmStruct, b::CTmStruct) = (==)(a.tm, b.tm)
 
-struct LclTmStruct <: CTmStruct
+mutable struct LclTmStruct <: CTmStruct
     tm::TmCStruct
 
     LclTmStruct() = new(TmCStruct())
@@ -49,7 +49,7 @@ struct LclTmStruct <: CTmStruct
     end
 end
 
-struct UtcTmStruct <: CTmStruct
+mutable struct UtcTmStruct <: CTmStruct
     tm::TmCStruct
 
     UtcTmStruct() = new(TmCStruct())
