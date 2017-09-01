@@ -144,21 +144,21 @@ for U in (:LCL, :UT)
   @eval begin
     (-)(udt::($U), udt2::($U)) = (-)(udt.value, udt2.value)
     (-)(udt::($U), p::Period) = ($U)((-)(udt.value, p))
-    (.-)(udt::($U), vec::Array{($U),1}) =
+    Base.broadcast(::typeof(-), udt::($U), vec::Array{($U),1}) =
       [(-)(udt, i) for i in vec]
-    (.-)(udt::($U), vec::Array{Period,1}) =
+    Base.broadcast(::typeof(-), udt::($U), vec::Array{Period,1}) =
       [(-)(udt, i) for i in vec]
-    (.-)(vec::Array{($U),1}, udt::($U)) =
+    Base.broadcast(::typeof(-), vec::Array{($U),1}, udt::($U)) =
       [(-)(i,udt) for i in vec]
-    (.-)(vec::Array{($U),1}, p::Period) =
+    Base.broadcast(::typeof(-), vec::Array{($U),1}, p::Period) =
       [(-)(i,p) for i in vec]
 
-   (+)(udt::($U), p::Period) = ($U)((+)(udt.value, p))
-   (+)(p::Period, udt::($U)) = (+)(udt, p)
-   (.+)(udt::($U), vec::Array{Period,1}) =
-     [(+)(udt, i) for i in vec]
-   (.+)(vec::Array{($U),1},p::Period) =
-     [(+)(i, p) for i in vec]
+    (+)(udt::($U), p::Period) = ($U)((+)(udt.value, p))
+    (+)(p::Period, udt::($U)) = (+)(udt, p)
+    Base.broadcast(::typeof(+), udt::($U), vec::Array{Period,1}) =
+      [(+)(udt, i) for i in vec]
+    Base.broadcast(::typeof(+), vec::Array{($U),1},p::Period) =
+      [(+)(i, p) for i in vec]
   end
 end
 
