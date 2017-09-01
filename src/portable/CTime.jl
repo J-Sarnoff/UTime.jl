@@ -1,5 +1,4 @@
-
-@compat abstract type CTmStruct end
+abstract type CTmStruct end
 
 const z32 = zero(Int32)
 
@@ -37,7 +36,7 @@ end
 
 (==)(a::CTmStruct, b::CTmStruct) = (==)(a.tm, b.tm)
 
-type LclTmStruct <: CTmStruct
+struct LclTmStruct <: CTmStruct
     tm::TmCStruct
 
     LclTmStruct() = new(TmCStruct())
@@ -50,7 +49,7 @@ type LclTmStruct <: CTmStruct
     end
 end
 
-type UtcTmStruct <: CTmStruct
+struct UtcTmStruct <: CTmStruct
     tm::TmCStruct
 
     UtcTmStruct() = new(TmCStruct())
@@ -63,7 +62,7 @@ type UtcTmStruct <: CTmStruct
     end
 end
 
-function LclTmStruct{T<:Integer}(year::T,month=1::T,day=1::T,hour=0::T,min=0::T,sec=0::T;isdst=(-1)::T)
+function LclTmStruct(year::T,month=1::T,day=1::T,hour=0::T,min=0::T,sec=0::T;isdst=(-1)::T) where T<:Integer
   lts = LclTmStruct()
   lts.tm.year  = Int32(year-1900)
   lts.tm.month = Int32(month-1)
@@ -75,7 +74,7 @@ function LclTmStruct{T<:Integer}(year::T,month=1::T,day=1::T,hour=0::T,min=0::T,
   lts
 end
 
-function UtcTmStruct{T<:Integer}(year::T,month=1::T,day=1::T,hour=0::T,min=0::T,sec=0::T;isdst=0::T)
+function UtcTmStruct(year::T,month=1::T,day=1::T,hour=0::T,min=0::T,sec=0::T;isdst=0::T) where T<:Integer
   uts = UtcTmStruct()
   uts.tm.year  = Int32(year-1900)
   uts.tm.month = Int32(month-1)
