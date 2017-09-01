@@ -1,4 +1,4 @@
-@compat abstract type WrappedDateTime<:AbstractTime end
+abstract type WrappedDateTime<: Base.Dates.AbstractTime end
 
 struct UT <: WrappedDateTime
     value::DateTime
