@@ -4,7 +4,7 @@ export ut, gmt, localtime, UT, LCL, utc
 
 import Base: show, string, (==), (!=)
 
-import Base.Dates
+using Base.Dates
 
 using Compat
 
