@@ -80,16 +80,16 @@ localtime() = LCL(Base.Dates.now())
 
 for U in [:LCL, :UT]
   @eval begin
-    $(U){T<:Integer}(yr::T) = $(U)(DateTime(yr))
-    $(U){T<:Integer}(yr::T,mo::T ) = $(U)(DateTime(yr,mo))
-    $(U){T<:Integer}(yr::T,mo::T,dy::T) = $(U)(DateTime(yr,mo,dy))
-    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T) =
+    $(U)(yr::T) where {T<:Integer} = $(U)(DateTime(yr))
+    $(U)(yr::T,mo::T ) where {T<:Integer} = $(U)(DateTime(yr,mo))
+    $(U)(yr::T,mo::T,dy::T) where {T<:Integer} = $(U)(DateTime(yr,mo,dy))
+    $(U)(yr::T,mo::T,dy::T,hr::T) where {T<:Integer} =
       $(U)(DateTime(yr,mo,dy,hr))
-    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T) =
+    $(U)(yr::T,mo::T,dy::T,hr::T,mi::T) where {T<:Integer} =
       $(U)(DateTime(yr,mo,dy,hr,mi))
-    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T) =
+    $(U)(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T) where {T<:Integer} =
       $(U)(DateTime(yr,mo,dy,hr,mi,sc))
-    $(U){T<:Integer}(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T,ss::T) =
+    $(U)(yr::T,mo::T,dy::T,hr::T,mi::T,sc::T,ss::T) where {T<:Integer} =
       $(U)(DateTime(yr,mo,dy,hr,mi,sc,ss))
   end
 end
